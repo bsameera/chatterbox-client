@@ -2,6 +2,27 @@ class App {
 
   constructor() {
     this.server = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages';
+    this.entityMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '/': '&#x2F;',
+      '`': '&#x60;',
+      '=': '&#x3D;',
+      '%': '&percnt',
+      '!': '&excl',
+      '@': '&commat',
+      '$': '&dollar',
+      '(': '&lpar',
+      ')': '&rpar',
+      '+': '&plus',
+      '{': '&lcub',
+      '}': '&rcub',
+      '[': '&lsqb',
+      ']': '&rsqb'
+    };
   }
 
   init() {
@@ -27,7 +48,8 @@ class App {
   
   fetch(message) {
     // console.log('this is', this.renderMessage);
-    var render = this.renderMessage;
+    let renderText = this.renderMessage;
+    let renderRooms = this.renderRoom;
 
     $.ajax({
       type: 'GET',
@@ -36,11 +58,13 @@ class App {
       data: JSON.stringify(message),
       success: function (data) {
         console.log('chatterbox: Message fetched', data);
-        // this.messages = data.results;
-        for (var i = 0; i < data.results.length; i++) {
-          //console.log(data.results[i]);
-
-          render(data.results[i]);
+        let roomSet = new Set();
+        for (let i = 0; i < data.results.length; i++) {
+          roomSet.add(data.results[i].roomname);
+          renderText(data.results[i]);
+        }
+        for (let item of roomSet) {
+          renderRooms(item);
         }    
       },
       error: function (data) {
@@ -54,35 +78,37 @@ class App {
     $('#chats').children().remove();
   }
   
+  
   renderMessage(message) {
+    
     let userName = message.username;
     let userText = message.text;
-    let roomName = message.roomname;
-    let appendingText = `<div><h1>${userName}</h1><p>${userText}</p><p>${roomName}</p></div>`; 
+    let appendingText = `<div class='tweet'><h2 class='userName'>${userName}</h2><p class='userText'>${userText}</p></div>`; 
     $( '#chats' ).append(appendingText);
   }
 
   renderRoom(roomName) {
-    $('#roomSelect').append(`<div>${roomName}</div>`);
+    $('#roomSelect').append(`<option>${roomName}</option>`);
   }
 
   handleUsernameClick() {
     
   }
 
-  // fetchData(property) {
-  //   let dataArray = [];
-  //   let data = this.fetch(); //array of 100 obj
-  //   //
-  // }
-  
+  escapeHtml(string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return this.entityMap[s];
+    });
+  }
+ 
+
 }
 
 $(document).ready(function () {
-  var app = new App();
   app.init();
 });
 
+var app = new App();
 
 
 
