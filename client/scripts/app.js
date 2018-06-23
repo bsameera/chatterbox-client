@@ -34,7 +34,7 @@ class App {
       contentType: 'application/json',
       data: JSON.stringify(message),
       success: function (data) {
-        console.log('chatterbox: Message fetched');
+        console.log('chatterbox: Message fetched', data);
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
