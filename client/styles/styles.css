@@ -87,4 +87,8 @@ form input[type=text] {
     color: #fff;
     background-color: #0090da;
 }
+select {
+  height: 20px;
+  width: 200px;
+}
 

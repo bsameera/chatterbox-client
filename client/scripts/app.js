@@ -1,14 +1,12 @@
-$(document).ready(function () {
-
-});
-
 class App {
 
   constructor() {
     this.server = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages';
   }
 
-  init() {}
+  init() {
+    this.fetch();
+  }
 
   send(message) {
     $.ajax({
@@ -28,6 +26,9 @@ class App {
 
   
   fetch(message) {
+    // console.log('this is', this.renderMessage);
+    var render = this.renderMessage;
+
     $.ajax({
       type: 'GET',
       url: this.server,
@@ -35,6 +36,12 @@ class App {
       data: JSON.stringify(message),
       success: function (data) {
         console.log('chatterbox: Message fetched', data);
+        // this.messages = data.results;
+        for (var i = 0; i < data.results.length; i++) {
+          //console.log(data.results[i]);
+
+          render(data.results[i]);
+        }    
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -60,12 +67,21 @@ class App {
   }
 
   handleUsernameClick() {
-
+    
   }
+
+  // fetchData(property) {
+  //   let dataArray = [];
+  //   let data = this.fetch(); //array of 100 obj
+  //   //
+  // }
   
 }
 
-const app = new App();
+$(document).ready(function () {
+  var app = new App();
+  app.init();
+});
 
 
 
