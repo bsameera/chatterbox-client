@@ -1,12 +1,19 @@
+$(document).ready(function () {
+
+});
 
 class App {
+
+  constructor() {
+    this.server = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages';
+  }
 
   init() {}
 
   send(message) {
     $.ajax({
       type: 'POST',
-      url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      url: this.server,
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function (data) {
@@ -20,11 +27,12 @@ class App {
   }
 
   
-  fetch() {
+  fetch(message) {
     $.ajax({
       type: 'GET',
-      server: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      url: this.server,
       contentType: 'application/json',
+      data: JSON.stringify(message),
       success: function (data) {
         console.log('chatterbox: Message fetched');
       },
@@ -56,7 +64,10 @@ class App {
   }
   
 }
+
 const app = new App();
+
+
 
 
 
