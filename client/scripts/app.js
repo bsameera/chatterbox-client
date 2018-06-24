@@ -2,6 +2,7 @@ class App {
 
   constructor() {
     this.server = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages';
+    this.user = prompt('What is your name?'); 
     this.entityMap = {
       '&': '&amp;',
       '<': '&lt;',
@@ -100,16 +101,25 @@ class App {
       return this.entityMap[s];
     });
   }
- 
-
 }
 
 $(document).ready(function () {
+
   app.init();
+
+  $('.submit').on('click', function(){
+    let textMessage = $('.textBox').val();
+    let newMessage = {
+      username: app.user,
+      text: textMessage
+    };
+    app.send(newMessage);
+    app.fetch();
+  });
+
 });
 
 var app = new App();
-
 
 
 
